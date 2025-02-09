@@ -1,48 +1,30 @@
-
 #include <stdio.h>
-#include <stdlib.h>
- 
-int compare(const void *a, const void *b) {
-    return (*(int*)a - *(int*)b);
-}
- 
+
 int main() {
-    int t;
-    scanf("%d", &t);
-    
-    while (t--) {
-        int n, k;
-        scanf("%d %d", &n, &k);
-        
-        int a[n], sorted_a[n];
-        
-        for (int i = 0; i < n; i++) {
-            scanf("%d", &a[i]);
-            sorted_a[i] = a[i];
-        }
-        
-        qsort(sorted_a, n, sizeof(int), compare);
-        
-        if (k >= n) {
-            printf("YES\n");
-        } else {
-            int is_sorted = 1;
-            for (int i = 0; i < n; i++) {
-                if (a[i] != sorted_a[i]) {
-                    is_sorted = 0;
-                    break;
-                }
-            }
-            
-            if (is_sorted) {
-                printf("YES\n");
-            } else if (k >= 2) {
-                printf("YES\n");
-            } else {
-                printf("NO\n");
-            }
-        }
+    int n, m;
+    scanf("%d %d", &n, &m);
+
+    int tasks[m]; 
+    for (int i = 0; i < m; i++) {
+        scanf("%d", &tasks[i]);
     }
-    
+
+    long long total_time = 0;
+    int current_position = 1;  // Xenia starts at house 1
+
+    for (int i = 0; i < m; i++) {
+        if (tasks[i] >= current_position) {
+            // Move directly to the next task house
+            total_time += tasks[i] - current_position;
+        } else {
+            // Move around the ring road to reach the house
+            total_time += (n - current_position) + tasks[i];
+        }
+        // Update the current position to the house of the completed task
+        current_position = tasks[i];
+    }
+
+    printf("%lld\n", total_time);
+
     return 0;
 }
